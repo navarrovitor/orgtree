@@ -5,8 +5,12 @@ class Api::V1::CompaniesController< Api::V1::ApplicationController
   end
 
   def show
-    @company = Company.find(params[:id])
-    render json: @company
+    pagy_metadata, paginated_records = pagy(Company.all, items: 10)
+
+    render json: {
+      data: ActiveModelSerializers::SerializableResource.new(paginated_records),
+      pagy: pagy_metadata
+    }
   end
 
   def create

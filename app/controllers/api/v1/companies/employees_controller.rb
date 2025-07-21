@@ -3,8 +3,12 @@ class Api::V1::Companies::EmployeesController< Api::V1::ApplicationController
 
   # GET /api/v1/companies/:company_id/employees
   def index
-    @employees = @company.employees
-    render json: @employees
+    pagy_metadata, paginated_records = pagy(@company.employees, items: 10)
+
+    render json: {
+      data: ActiveModelSerializers::SerializableResource.new(paginated_records),
+      pagy: pagy_metadata
+    }
   end
 
   # POST /api/v1/companies/:company_id/employees
