@@ -1,4 +1,4 @@
-class Api::V1::Companies::EmployeesController < ApplicationController
+class Api::V1::Companies::EmployeesController< Api::V1::ApplicationController
   before_action :set_company
 
   # GET /api/v1/companies/:company_id/employees

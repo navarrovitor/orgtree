@@ -1,4 +1,4 @@
-class Api::V1::EmployeesController < ApplicationController
+class Api::V1::EmployeesController< Api::V1::ApplicationController
   before_action :set_employee, only: [:destroy, :peers, :subordinates, :second_level_subordinates, :assign_manager]
 
   # DELETE /api/v1/employees/:id
@@ -11,13 +11,9 @@ class Api::V1::EmployeesController < ApplicationController
   # Corpo da requisição esperado: { "manager_id": <id_do_novo_gestor> }
   # A User Story 3.1 pede para "associar um colaborador como gestor de outro usuário"
   def assign_manager
-    # 1. Pega o ID do novo gestor a partir dos parâmetros da requisição.
     manager_id = params.require(:manager_id)
-    
-    # 2. Encontra o funcionário que será o novo gestor.
     manager = Employee.find(manager_id)
 
-    # 3. Atribui o novo gestor e tenta salvar.
     @employee.manager = manager
 
     if @employee.save
@@ -25,10 +21,6 @@ class Api::V1::EmployeesController < ApplicationController
     else
       render json: { errors: @employee.errors.full_messages }, status: :unprocessable_entity
     end
-
-  # Caso o ID do gestor enviado não exista no banco.
-  rescue ActiveRecord::RecordNotFound
-    render json: { error: "Manager with ID #{manager_id} not found" }, status: :not_found
   end
 
   # GET /api/v1/employees/:id/peers
