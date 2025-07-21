@@ -1,10 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 import { getCompanies } from '../../api/apiService';
+import { Link } from 'react-router-dom';
 
 function CompanyList() {
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['companies'], // A unique key for this data
-    queryFn: getCompanies,  // The function to fetch the data
+    queryKey: ['companies'],
+    queryFn: getCompanies,
   });
 
   if (isLoading) {
@@ -17,10 +18,11 @@ function CompanyList() {
 
   return (
     <div>
-      <h2>Companies</h2>
       <ul>
         {data.data.map((company) => (
-          <li key={company.id}>{company.name}</li>
+          <li key={company.id}>
+            <Link to={`/companies/${company.id}`}>{company.name}</Link>
+          </li>
         ))}
       </ul>
     </div>
