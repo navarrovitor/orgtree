@@ -7,6 +7,8 @@ class Employee < ApplicationRecord
   
   # Um empregado pode ter N subordinados. Se o gestor for deletado, seus subordinados ficarão com o campo manager_id nulo 
   has_many :subordinates, class_name: 'Employee', foreign_key: 'manager_id', dependent: :nullify
+  
+  has_many :second_level_subordinates, through: :subordinates, source: :subordinates 
 
   # Valida se o empregado tem um nome, email e uma empresa
   validates :name, :email, :company, presence: true
