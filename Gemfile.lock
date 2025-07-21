@@ -87,6 +87,11 @@ GEM
     diff-lcs (1.6.2)
     erb (5.0.2)
     erubi (1.13.1)
+    factory_bot (6.5.4)
+      activesupport (>= 6.1.0)
+    factory_bot_rails (6.5.0)
+      factory_bot (~> 6.5)
+      railties (>= 6.1.0)
     globalid (1.2.1)
       activesupport (>= 6.1)
     i18n (1.14.7)
@@ -233,6 +238,7 @@ DEPENDENCIES
   bigdecimal
   bootsnap
   debug
+  factory_bot_rails
   mutex_m
   puma (~> 5.0)
   rails (~> 7.0.8, >= 7.0.8.7)

@@ -2,10 +2,15 @@ require 'rails_helper'
 
 RSpec.describe "Api::V1::Companies::Employees", type: :request do
   describe "POST /api/v1/companies/:company_id/employees" do
-    let(:company) { Company.create!(name: "ABCorp") }
-
+    let(:company) { create(:company) }
+    
     it "creates a new employee for the correct company" do
-      employee_params = { employee: { name: "João", email: "joao@abcorp.com" } }
+      employee_params = {
+        employee: {
+          name: "João",
+          email: "joao@#{company.name.downcase}.com"
+        }
+      }
 
       post "/api/v1/companies/#{company.id}/employees", params: employee_params
 
@@ -21,8 +26,7 @@ RSpec.describe "Api::V1::Companies::Employees", type: :request do
 
       expect(response).to have_http_status(:unprocessable_entity)
       json_response = JSON.parse(response.body)
-      # Verifica se o controller está retornando o erro correto do modelo
-      expect(json_response['email']).to include("domain must match the company's domain (abcorp.com)")
+      expect(json_response['email']).to include("domain must match the company's domain (#{company.name.downcase}.com)")
     end
   end
 end
