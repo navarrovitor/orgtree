@@ -14,7 +14,7 @@ ActiveRecord::Base.transaction do
   ceo_one = abcorp.employees.create!(
     name: "Catarina",
     email: "catarina@abcorp.com",
-    picture: "foto_catarina"
+    picture: "https://i.pravatar.cc/150?u=abcorp"
   )
 
   # Diretores (reportam ao CEO)
@@ -22,22 +22,22 @@ ActiveRecord::Base.transaction do
     name: "Daniel",
     email: "daniel@abcorp.com",
     manager: ceo_one,
-    picture: "foto_daniel"
+    picture: "https://i.pravatar.cc/150?u=abcorp"
   )
 
   director_two = abcorp.employees.create!(
     name: "Patricia",
     email: "patricia@abcorp.com",
     manager: ceo_one,
-    picture: "foto_patricia"
+    picture: "https://i.pravatar.cc/150?u=abcorp"
   )
   
   # Diretor sem liderados diretos
-  director_three = abcorp.employees.create!(
+  abcorp.employees.create!(
     name: "Leonardo",
     email: "leonardo@abcorp.com",
     manager: ceo_one,
-    picture: "foto_leonardo"
+    picture: "https://i.pravatar.cc/150?u=abcorp"
   )
 
   # Gerentes (reportam aos Diretores)
@@ -45,21 +45,21 @@ ActiveRecord::Base.transaction do
     name: "Fernanda",
     email: "fernanda@abcorp.com",
     manager: director_one,
-    picture: "foto_fernanda"
+    picture: "https://i.pravatar.cc/150?u=abcorp"
   )
 
   manager_two = abcorp.employees.create!(
     name: "Bruno",
     email: "bruno@abcorp.com",
     manager: director_one,
-    picture: "foto_bruno"
+    picture: "https://i.pravatar.cc/150?u=abcorp"
   )
 
   manager_three = abcorp.employees.create!(
     name: "Diego",
     email: "diego@abcorp.com",
     manager: director_two,
-    picture: "foto_diego"
+    picture: "https://i.pravatar.cc/150?u=abcorp"
   )
 
   # Colaboradores (reportam aos Gerentes)
@@ -67,42 +67,42 @@ ActiveRecord::Base.transaction do
     name: "Rafael",
     email: "rafael@abcorp.com",
     manager: manager_one,
-    picture: "foto_rafael"
+    picture: "https://i.pravatar.cc/150?u=abcorp"
   )
 
   abcorp.employees.create!(
     name: "Viviane",
     email: "viviane@abcorp.com",
     manager: manager_one,
-    picture: "foto_viviane"
+    picture: "https://i.pravatar.cc/150?u=abcorp"
   )
 
   abcorp.employees.create!(
     name: "Ricardo",
     email: "ricardo@abcorp.com",
     manager: manager_two,
-    picture: "foto_ricardo"
+    picture: "https://i.pravatar.cc/150?u=abcorp"
   )
 
   abcorp.employees.create!(
     name: "Paula",
     email: "paula@abcorp.com",
     manager: manager_two,
-    picture: "foto_paula"
+    picture: "https://i.pravatar.cc/150?u=abcorp"
   )
 
   abcorp.employees.create!(
     name: "Nelson",
     email: "nelson@abcorp.com",
     manager: manager_two,
-    picture: "foto_nelson"
+    picture: "https://i.pravatar.cc/150?u=abcorp"
   )
 
   abcorp.employees.create!(
     name: "Felipe",
     email: "felipe@abcorp.com",
     manager: manager_three,
-    picture: "foto_felipe"
+    picture: "https://i.pravatar.cc/150?u=abcorp"
   )
 
   puts "Creating employees for GHInc..."
@@ -110,14 +110,14 @@ ActiveRecord::Base.transaction do
   ceo_two = ghinc.employees.create!(
     name: "Otavio",
     email: "otavio@ghinc.com",
-    picture: "foto_otavio"
+    picture: "https://i.pravatar.cc/150?u=ghinc"
   )
 
   ghinc.employees.create!(
     name: "Davi",
     email: "davi@ghinc.com",
     manager: ceo_two,
-    picture: "foto_davi"
+    picture: "https://i.pravatar.cc/150?u=ghinc"
   )
   
   puts "Seed finished!"
