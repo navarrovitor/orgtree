@@ -1,12 +1,24 @@
-import CompanyList from './features/companies/CompanyList';
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import HomePage from "./pages/HomePage";
+import CompanyDetailPage from "./pages/CompanyDetailPage";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <HomePage />, 
+  },
+  {
+    path: "/companies/:id",
+    element: <CompanyDetailPage />, 
+  },
+]);
 
 function App() {
   return (
-    <div>
-      <h1>OrgTree Frontend</h1>
-      <CompanyList />
+    <div style={{ padding: '2rem' }}>
+      <RouterProvider router={router} />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
