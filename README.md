@@ -135,3 +135,4 @@ rake rswag:specs:run
 -----
 
 Desenvolvido com ❤️ por navarrovitor
+git mv app Gemfile* Rakefile config db lib log public storage test vendor .gitattributes .gitignore .rspec package.json yarn.lock config.ru bin api/
