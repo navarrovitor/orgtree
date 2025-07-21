@@ -35,4 +35,76 @@ RSpec.describe "Api::V1::Employees", type: :request do
       expect(json_response.first['id']).to eq(dev_two.id)
     end
   end
+
+  path '/api/v1/employees/{id}' do
+    delete 'Deletes an employee' do
+      tags 'Employees'
+      parameter name: :id, in: :path, type: :string
+
+      response '204', 'employee deleted' do
+        let(:id) { employee.id }
+        run_test!
+      end
+
+      response '404', 'employee not found' do
+        let(:id) { 'invalid' }
+        run_test!
+      end
+    end
+  end
+
+  path '/api/v1/employees/{id}/assign_manager' do
+    post 'Assigns a manager to an employee' do
+      tags 'Organograms'
+      consumes 'application/json'
+      parameter name: :id, in: :path, type: :string
+      parameter name: :manager_params, in: :body, schema: {
+        type: :object,
+        properties: {
+          manager_id: { type: :integer, example: 1 }
+        },
+        required: ['manager_id']
+      }
+
+      response '200', 'manager assigned' do
+        let(:id) { employee.id }
+        let(:manager_params) { { manager_id: manager.id } }
+        run_test!
+      end
+
+      response '422', 'invalid assignment (e.g., creates loop)' do
+        let(:id) { manager.id }
+        let(:manager_params) { { manager_id: employee.id } }
+        run_test!
+      end
+    end
+  end
+
+  path '/api/v1/employees/{id}/peers' do
+    get 'Retrieves employee peers' do
+      tags 'Organograms'
+      produces 'application/json'
+      parameter name: :id, in: :path, type: :string
+
+      response '200', 'peers found' do
+        before { create(:employee, company: company, manager: manager) }
+        let(:id) { employee.id }
+        run_test!
+      end
+    end
+  end
+
+  path '/api/v1/employees/{id}/subordinates' do
+    get "Retrieves employee's direct subordinates" do
+      tags 'Organograms'
+      produces 'application/json'
+      parameter name: :id, in: :path, type: :string
+
+      response '200', 'subordinates found' do
+        before { create_list(:employee, 2, company: company, manager: employee) }
+        let(:id) { employee.id }
+        run_test!
+      end
+    end
+  end
 end

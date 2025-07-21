@@ -1,0 +1,183 @@
+---
+openapi: 3.0.1
+info:
+  title: OrgTree - v1
+  version: v1
+  description: API documentation for the company organization chart challenge.
+paths:
+  "/api/v1/companies/{company_id}/employees":
+    get:
+      summary: Lists employees for a company
+      tags:
+      - Employees
+      parameters:
+      - name: company_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+    post:
+      summary: Creates an employee for a company
+      tags:
+      - Employees
+      parameters:
+      - name: company_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          description: employee created
+        '422':
+          description: invalid request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                employee:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: John Doe
+                    email:
+                      type: string
+                      example: john.doe@company1.com
+                    picture:
+                      type: string
+                      example: http://example.com/pic.jpg
+                  required:
+                  - name
+                  - email
+              required:
+              - employee
+  "/api/v1/companies":
+    get:
+      summary: Lists all companies
+      tags:
+      - Companies
+      responses:
+        '200':
+          description: successful
+    post:
+      summary: Creates a company
+      tags:
+      - Companies
+      parameters: []
+      responses:
+        '201':
+          description: company created
+        '422':
+          description: invalid request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                company:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: ABCorp
+                  required:
+                  - name
+              required:
+              - company
+  "/api/v1/companies/{id}":
+    get:
+      summary: Retrieves a company
+      tags:
+      - Companies
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: company found
+        '404':
+          description: company not found
+  "/api/v1/employees/{id}":
+    delete:
+      summary: Deletes an employee
+      tags:
+      - Employees
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: employee deleted
+        '404':
+          description: employee not found
+  "/api/v1/employees/{id}/assign_manager":
+    post:
+      summary: Assigns a manager to an employee
+      tags:
+      - Organograms
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: manager assigned
+        '422':
+          description: invalid assignment (e.g., creates loop)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                manager_id:
+                  type: integer
+                  example: 1
+              required:
+              - manager_id
+  "/api/v1/employees/{id}/peers":
+    get:
+      summary: Retrieves employee peers
+      tags:
+      - Organograms
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: peers found
+  "/api/v1/employees/{id}/subordinates":
+    get:
+      summary: Retrieves employee's direct subordinates
+      tags:
+      - Organograms
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: subordinates found
+servers:
+- url: http://localhost:3000
+  description: Local development server

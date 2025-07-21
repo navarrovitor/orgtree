@@ -51,4 +51,67 @@ RSpec.describe "Api::V1::Companies", type: :request do
       end
     end
   end
+
+  path '/api/v1/companies' do
+    get 'Lists all companies' do
+      tags 'Companies'
+      produces 'application/json'
+
+      response '200', 'successful' do
+        before { create_list(:company, 2) }
+        run_test!
+      end
+    end
+
+    post 'Creates a company' do
+      tags 'Companies'
+      consumes 'application/json'
+      parameter name: :company, in: :body, schema: {
+        type: :object,
+        properties: {
+          company: {
+            type: :object,
+            properties: {
+              name: { type: :string, example: 'ABCorp' }
+            },
+            required: ['name']
+          }
+        },
+        required: ['company']
+      }
+
+      response '201', 'company created' do
+        let(:company) { { company: { name: 'ABCorp' } } }
+
+        run_test! do |response|
+          data = JSON.parse(response.body)
+          expect(data['name']).to eq('ABCorp')
+        end
+      end
+
+      response '422', 'invalid request' do
+        let(:company) { { company: { name: '' } } }
+
+        run_test!
+      end
+    end
+  end
+
+  path '/api/v1/companies/{id}' do
+    get 'Retrieves a company' do
+      tags 'Companies'
+      produces 'application/json'
+      parameter name: :id, in: :path, type: :string
+
+      response '200', 'company found' do
+        let(:id) { create(:company, name: 'Specific Company').id }
+        run_test!
+      end
+
+      response '404', 'company not found' do
+        let(:id) { 'invalid' }
+        run_test!
+      end
+    end
+  end
 end
