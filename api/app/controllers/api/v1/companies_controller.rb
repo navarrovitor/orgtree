@@ -1,16 +1,17 @@
-class Api::V1::CompaniesController< Api::V1::ApplicationController
+class Api::V1::CompaniesController < Api::V1::ApplicationController
   def index
-    @companies = Company.all
-    render json: @companies
-  end
-
-  def show
-    pagy_metadata, paginated_records = pagy(Company.all, items: 10)
+    companies_scope = Company.includes(:employees)
+    pagy_metadata, paginated_records = pagy(companies_scope)
 
     render json: {
       data: ActiveModelSerializers::SerializableResource.new(paginated_records),
       pagy: pagy_metadata
     }
+  end
+
+  def show
+    @company = Company.find(params[:id])
+    render json: @company
   end
 
   def create

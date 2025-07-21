@@ -1,49 +1,20 @@
-require 'rails_helper'
+require 'swagger_helper'
 
 RSpec.describe "Api::V1::Employees", type: :request do
-  let(:company) { create(:company) }
-  let(:ceo) { create(:employee, company: company) }
-  let(:tech_lead) { create(:employee, company: company, manager: ceo) }
-
-  describe "POST /api/v1/employees/:id/assign_manager" do
-    it "assigns a valid manager to an employee" do
-      post "/api/v1/employees/#{tech_lead.id}/assign_manager", params: { manager_id: ceo.id }
-
-      expect(response).to have_http_status(:ok)
-      expect(tech_lead.reload.manager).to eq(ceo)
-    end
-
-    it "returns an error when trying to create a organization hierarchy loop" do
-      post "/api/v1/employees/#{ceo.id}/assign_manager", params: { manager_id: tech_lead.id }
-
-      expect(response).to have_http_status(:unprocessable_entity)
-      json_response = JSON.parse(response.body)
-      expect(json_response['errors']).to include("Manager creates a organization hierarchy loop")
-    end
-  end
-
-  describe "GET /api/v1/employees/:id/peers" do
-    let!(:dev_one) { create(:employee, company: company, manager: tech_lead) }
-    let!(:dev_two) { create(:employee, company: company, manager: tech_lead) }
-
-    it "returns the employee's peers (excluding self)" do
-      get "/api/v1/employees/#{dev_one.id}/peers"
-
-      expect(response).to have_http_status(:ok)
-      json_response = JSON.parse(response.body)
-      expect(json_response.size).to eq(1)
-      expect(json_response.first['id']).to eq(dev_two.id)
-    end
-  end
 
   path '/api/v1/employees/{id}' do
+    parameter name: :id, in: :path, type: :string, description: 'Employee ID'
+
     delete 'Deletes an employee' do
       tags 'Employees'
-      parameter name: :id, in: :path, type: :string
 
       response '204', 'employee deleted' do
+        let(:employee) { create(:employee) }
         let(:id) { employee.id }
-        run_test!
+
+        run_test! do
+          expect(Employee.find_by(id: employee.id)).to be_nil
+        end
       end
 
       response '404', 'employee not found' do
@@ -54,56 +25,86 @@ RSpec.describe "Api::V1::Employees", type: :request do
   end
 
   path '/api/v1/employees/{id}/assign_manager' do
+    parameter name: :id, in: :path, type: :string, description: 'Employee ID'
+
     post 'Assigns a manager to an employee' do
-      tags 'Organograms'
+      tags 'Org Chart'
       consumes 'application/json'
-      parameter name: :id, in: :path, type: :string
       parameter name: :manager_params, in: :body, schema: {
         type: :object,
-        properties: {
-          manager_id: { type: :integer, example: 1 }
-        },
+        properties: { manager_id: { type: :integer, example: 1 } },
         required: ['manager_id']
       }
 
       response '200', 'manager assigned' do
+        let(:company) { create(:company) }
+        let(:employee) { create(:employee, company: company) }
+        let(:manager) { create(:employee, company: company) }
         let(:id) { employee.id }
         let(:manager_params) { { manager_id: manager.id } }
-        run_test!
+
+        run_test! do |response|
+          expect(employee.reload.manager).to eq(manager)
+          data = JSON.parse(response.body)
+          expect(data['manager']['id']).to eq(manager.id)
+        end
       end
 
       response '422', 'invalid assignment (e.g., creates loop)' do
+        let(:company) { create(:company) }
+        let(:manager) { create(:employee, company: company) }
+        let(:employee) { create(:employee, company: company, manager: manager) }
         let(:id) { manager.id }
         let(:manager_params) { { manager_id: employee.id } }
-        run_test!
+
+        run_test! do |response|
+          data = JSON.parse(response.body)
+          expect(data['errors']).to include("Manager creates a organization hierarchy loop")
+        end
       end
     end
   end
 
   path '/api/v1/employees/{id}/peers' do
+    parameter name: :id, in: :path, type: :string, description: 'Employee ID'
+
     get 'Retrieves employee peers' do
-      tags 'Organograms'
+      tags 'Org Chart'
       produces 'application/json'
-      parameter name: :id, in: :path, type: :string
 
       response '200', 'peers found' do
-        before { create(:employee, company: company, manager: manager) }
-        let(:id) { employee.id }
-        run_test!
+        let(:company) { create(:company) }
+        let(:manager) { create(:employee, company: company) }
+        let(:employee1) { create(:employee, company: company, manager: manager) }
+        let!(:employee2) { create(:employee, company: company, manager: manager) }
+        let(:id) { employee1.id }
+
+        run_test! do |response|
+          data = JSON.parse(response.body)
+          expect(data.size).to eq(1)
+          expect(data.first['id']).to eq(employee2.id)
+        end
       end
     end
   end
 
   path '/api/v1/employees/{id}/subordinates' do
+    parameter name: :id, in: :path, type: :string, description: 'Employee ID'
+
     get "Retrieves employee's direct subordinates" do
-      tags 'Organograms'
+      tags 'Org Chart'
       produces 'application/json'
-      parameter name: :id, in: :path, type: :string
 
       response '200', 'subordinates found' do
-        before { create_list(:employee, 2, company: company, manager: employee) }
-        let(:id) { employee.id }
-        run_test!
+        let(:manager) { create(:employee) }
+        let!(:subordinates) { create_list(:employee, 2, company: manager.company, manager: manager) }
+        let(:id) { manager.id }
+
+        run_test! do |response|
+          data = JSON.parse(response.body)
+          expect(data.size).to eq(2)
+          expect(data.map{ |e| e['id'] }).to match_array(subordinates.map(&:id))
+        end
       end
     end
   end

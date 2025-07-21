@@ -1,4 +1,4 @@
-class Api::V1::EmployeesController< Api::V1::ApplicationController
+class Api::V1::EmployeesController < Api::V1::ApplicationController
   before_action :set_employee, only: [:destroy, :peers, :subordinates, :second_level_subordinates, :assign_manager]
 
   # DELETE /api/v1/employees/:id

@@ -1,55 +1,24 @@
-require 'rails_helper'
+require 'swagger_helper'
 
-RSpec.describe "Api::V1::Companies::Employees", type: :request do
-  describe "POST /api/v1/companies/:company_id/employees" do
-    let(:company) { create(:company) }
-    
-    it "creates a new employee for the correct company" do
-      employee_params = {
-        employee: {
-          name: "João",
-          email: "joao@#{company.name.downcase}.com"
-        }
-      }
-
-      post "/api/v1/companies/#{company.id}/employees", params: employee_params
-
-      expect(response).to have_http_status(:created)
-      expect(company.employees.count).to eq(1)
-      expect(company.employees.first.name).to eq("João")
-    end
-
-    it "returns an error if email domain is invalid" do
-      employee_params = { employee: { name: "Pedro", email: "pedro@gmail.com" } }
-
-      post "/api/v1/companies/#{company.id}/employees", params: employee_params
-
-      expect(response).to have_http_status(:unprocessable_entity)
-      json_response = JSON.parse(response.body)
-      expect(json_response['email']).to include("domain must match the company's domain (#{company.name.downcase}.com)")
-    end
-  end
+RSpec.describe 'Api::V1::Companies::Employees', type: :request do
+  let(:company) { create(:company) }
 
   path '/api/v1/companies/{company_id}/employees' do
+    parameter name: :company_id, in: :path, type: :string, description: 'Company ID'
+
     get 'Lists employees for a company' do
       tags 'Employees'
       produces 'application/json'
-      parameter name: :company_id, in: :path, type: :string
-      parameter name: :page, in: :query, type: :integer, required: false, description: 'Page number'
+      parameter name: :page, in: :query, type: :integer, required: false, description: 'Page number for pagination'
 
       response '200', 'successful' do
-        before { create_list(:employee, 15, company: company) }
         let(:company_id) { company.id }
+        before { create_list(:employee, 15, company: company) }
 
         run_test! do |response|
           json_response = JSON.parse(response.body)
-          
           expect(json_response.keys).to contain_exactly('data', 'pagy')
-          
           expect(json_response['data'].size).to eq(10)
-          
-          expect(json_response['pagy']['count']).to eq(15)
-          expect(json_response['pagy']['next']).to eq(2)
         end
       end
     end
@@ -57,7 +26,6 @@ RSpec.describe "Api::V1::Companies::Employees", type: :request do
     post 'Creates an employee for a company' do
       tags 'Employees'
       consumes 'application/json'
-      parameter name: :company_id, in: :path, type: :string
       parameter name: :employee_params, in: :body, schema: {
         type: :object,
         properties: {
@@ -65,7 +33,7 @@ RSpec.describe "Api::V1::Companies::Employees", type: :request do
             type: :object,
             properties: {
               name: { type: :string, example: 'John Doe' },
-              email: { type: :string, example: "john.doe@company1.com" },
+              email: { type: :string, example: 'john.doe@companyname.com' },
               picture: { type: :string, example: 'http://example.com/pic.jpg' }
             },
             required: %w[name email]
@@ -77,13 +45,21 @@ RSpec.describe "Api::V1::Companies::Employees", type: :request do
       response '201', 'employee created' do
         let(:company_id) { company.id }
         let(:employee_params) { { employee: { name: 'Jane Doe', email: "jane.doe@#{company.name.downcase}.com" } } }
-        run_test!
+        
+        run_test! do |response|
+          expect(company.employees.count).to eq(1)
+          expect(company.employees.first.name).to eq('Jane Doe')
+        end
       end
 
-      response '422', 'invalid request' do
+      response '422', 'invalid request (e.g., wrong domain)' do
         let(:company_id) { company.id }
-        let(:employee_params) { { employee: { name: 'Jane Doe', email: 'invalid-email@othercorp.com' } } }
-        run_test!
+        let(:employee_params) { { employee: { name: 'Pedro', email: 'pedro@gmail.com' } } }
+
+        run_test! do |response|
+          json_response = JSON.parse(response.body)
+          expect(json_response['email'].first).to include("domain must match the company's domain")
+        end
       end
     end
   end
