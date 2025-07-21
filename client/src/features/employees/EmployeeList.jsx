@@ -1,4 +1,16 @@
-function EmployeeList({ employees }) {
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { deleteEmployee } from '../../api/apiService';
+
+function EmployeeList({ employees, companyId }) {
+  const queryClient = useQueryClient();
+
+  const { mutate } = useMutation({
+    mutationFn: deleteEmployee,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['company', companyId] });
+    },
+  });
+
   if (!employees || employees.length === 0) {
     return <p>This company has no employees yet.</p>;
   }
@@ -15,6 +27,12 @@ function EmployeeList({ employees }) {
               style={{ width: '40px', height: '40px', borderRadius: '50%', marginRight: '10px', verticalAlign: 'middle' }} 
             />
             <strong>{employee.name}</strong> ({employee.email})
+            <button
+              onClick={() => mutate(employee.id)}
+              style={{ marginLeft: '1rem' }}
+            >
+              Delete
+            </button>
           </li>
         ))}
       </ul>

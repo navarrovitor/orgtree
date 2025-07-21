@@ -3,15 +3,12 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createCompany } from '../../api/apiService';
 
 function CompanyCreateForm() {
-  // 1. A simple state to hold the value of the input field
   const [name, setName] = useState('');
 
-  // 2. Get access to the React Query client
   const queryClient = useQueryClient();
 
-  // 3. Set up the mutation
   const { mutate, isPending } = useMutation({
-    mutationFn: createCompany, // The function to call when we want to mutate data
+    mutationFn: createCompany,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['companies'] });
       setName('');
