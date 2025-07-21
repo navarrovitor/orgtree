@@ -35,11 +35,22 @@ RSpec.describe "Api::V1::Companies::Employees", type: :request do
       tags 'Employees'
       produces 'application/json'
       parameter name: :company_id, in: :path, type: :string
+      parameter name: :page, in: :query, type: :integer, required: false, description: 'Page number'
 
       response '200', 'successful' do
+        before { create_list(:employee, 15, company: company) }
         let(:company_id) { company.id }
-        before { create_list(:employee, 3, company: company) }
-        run_test!
+
+        run_test! do |response|
+          json_response = JSON.parse(response.body)
+          
+          expect(json_response.keys).to contain_exactly('data', 'pagy')
+          
+          expect(json_response['data'].size).to eq(10)
+          
+          expect(json_response['pagy']['count']).to eq(15)
+          expect(json_response['pagy']['next']).to eq(2)
+        end
       end
     end
 

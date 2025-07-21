@@ -56,10 +56,21 @@ RSpec.describe "Api::V1::Companies", type: :request do
     get 'Lists all companies' do
       tags 'Companies'
       produces 'application/json'
+      parameter name: :page, in: :query, type: :integer, required: false, description: 'Page number for pagination'
 
       response '200', 'successful' do
-        before { create_list(:company, 2) }
-        run_test!
+        before { create_list(:company, 12) }
+        
+        run_test! do |response|
+          json_response = JSON.parse(response.body)
+
+          expect(json_response.keys).to contain_exactly('data', 'pagy')
+
+          expect(json_response['data'].size).to eq(10)
+
+          expect(json_response['pagy']['count']).to eq(12)
+          expect(json_response['pagy']['pages']).to eq(2)
+        end
       end
     end
 
