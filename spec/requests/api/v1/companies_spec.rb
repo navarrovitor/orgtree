@@ -12,6 +12,18 @@ RSpec.describe "Api::V1::Companies", type: :request do
       expect(json_response.size).to eq(2)
     end
   end
+
+  describe "GET /api/v1/companies/:id" do
+    context "when the company does not exist" do
+      it "returns a not found status" do
+        get "/api/v1/companies/99999"
+
+        expect(response).to have_http_status(:not_found)
+        json_response = JSON.parse(response.body)
+        expect(json_response['error']).to include("Couldn't find Company with 'id'=99999")
+      end
+    end
+  end
   describe "POST /api/v1/companies" do
     context "with valid parameters" do
       let(:valid_params) { { company: attributes_for(:company) } }
