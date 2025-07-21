@@ -113,7 +113,7 @@ rspec
 
 ```bash
 # A partir da pasta da API
-rake rswag:specs:run
+rake rswag:specs:swaggerize
 ```
 
 ## Modelos & Relacionamentos
