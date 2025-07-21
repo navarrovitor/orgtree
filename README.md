@@ -4,21 +4,19 @@ Uma aplicação full-stack para gerenciamento de organogramas, construída com R
 
 ## Tabela de Conteúdos
 
-1.  [Sobre o Projeto](https://www.google.com/search?q=%23sobre-o-projeto)
-2.  [Funcionalidades](https://www.google.com/search?q=%23funcionalidades)
-3.  [Documentação da API (Swagger)](https://www.google.com/search?q=%23documenta%C3%A7%C3%A3o-da-api-swagger)
-4.  [Stack de Tecnologias](https://www.google.com/search?q=%23stack-de-tecnologias)
-5.  [Como Executar o Projeto](https://www.google.com/search?q=%23como-executar-o-projeto)
-6.  [Como Rodar os Testes](https://www.google.com/search?q=%23como-rodar-os-testes)
-7.  [Modelos & Relacionamentos](https://www.google.com/search?q=%23modelos--relacionamentos)
+1.  [Sobre o Projeto](https://github.com/navarrovitor/orgtree#sobre-o-projeto)
+2.  [Funcionalidades](https://github.com/navarrovitor/orgtree#funcionalidades)
+3.  [Documentação da API (Swagger)](https://github.com/navarrovitor/orgtree#documenta%C3%A7%C3%A3o-da-api-swagger)
+4.  [Stack de Tecnologias](https://github.com/navarrovitor/orgtree#stack-de-tecnologias)
+5.  [Como Executar o Projeto](https://github.com/navarrovitor/orgtree#como-executar-o-projeto)
+6.  [Como Rodar os Testes](https://github.com/navarrovitor/orgtree#como-rodar-os-testes)
+7.  [Modelos & Relacionamentos](https://github.com/navarrovitor/orgtree#modelos--relacionamentos)
 
 ## Sobre o Projeto
 
 O OrgTree é uma aplicação monolítica composta por um backend **API RESTful em Rails** e um frontend em **React**. O objetivo é fornecer uma ferramenta robusta e escalável para empresas gerenciarem sua estrutura organizacional, funcionários e hierarquias.
 
 ## Funcionalidades
-
-### Funcionalidades Principais
 
   - **Gerenciamento de Empresas:** Cadastro, listagem e visualização de múltiplas empresas no sistema.
   - **Gerenciamento de Colaboradores:** Cadastro, listagem e remoção de colaboradores, sempre associados a uma empresa.
@@ -119,8 +117,7 @@ rake rswag:specs:run
 ```
 
 ## Modelos & Relacionamentos
-
-\<img width="872" height="445" alt="image" src="[https://github.com/user-attachments/assets/332e2e86-4bff-44d7-8c23-ed7484c581f5](https://github.com/user-attachments/assets/332e2e86-4bff-44d7-8c23-ed7484c581f5)" /\>
+<img width="872" height="445" alt="image" src="https://github.com/user-attachments/assets/332e2e86-4bff-44d7-8c23-ed7484c581f5" />
 
   - **Company**: Para representar uma empresa
       - **Atributos**:
