@@ -1,9 +1,10 @@
-class Api::V1::Companies::EmployeesController< Api::V1::ApplicationController
+class Api::V1::Companies::EmployeesController < Api::V1::ApplicationController
   before_action :set_company
 
   # GET /api/v1/companies/:company_id/employees
   def index
-    pagy_metadata, paginated_records = pagy(@company.employees, items: 10)
+    employees_scope = @company.employees.includes(:manager, :subordinates)
+    pagy_metadata, paginated_records = pagy(employees_scope)
 
     render json: {
       data: ActiveModelSerializers::SerializableResource.new(paginated_records),
