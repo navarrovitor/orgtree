@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getCompanyById } from '../api/apiService';
 import EmployeeList from '../features/employees/EmployeeList';
 import EmployeeCreateForm from '../features/employees/EmployeeCreateForm';
+import OrgChart from '../features/employees/OrgChart';
 
 function CompanyDetailPage() {
   const { id } = useParams();
@@ -25,7 +26,7 @@ function CompanyDetailPage() {
       <h2>{data.name}</h2>
       <hr />
       <EmployeeCreateForm companyId={id} />
-      <EmployeeList employees={data.employees} companyId={id} />
+      <OrgChart employees={data.employees} />
     </div>
   );
 }
