@@ -27,3 +27,10 @@ export const createEmployee = async ({ companyId, employeeData }) => {
 export const deleteEmployee = async (employeeId) => {
   await apiClient.delete(`/employees/${employeeId}`);
 };
+
+export const assignManager = async ({ employeeId, managerId }) => {
+  const response = await apiClient.post(`/employees/${employeeId}/assign_manager`, {
+    manager_id: managerId,
+  });
+  return response.data;
+};
