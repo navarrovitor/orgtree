@@ -14,7 +14,7 @@ ActiveRecord::Base.transaction do
   ceo_one = abcorp.employees.create!(
     name: "Catarina",
     email: "catarina@abcorp.com",
-    picture: "https://i.pravatar.cc/150?u=abcorp"
+    picture: "https://i.pravatar.cc/150?u=#{rand(10000..99999).to_s}"
   )
 
   # Diretores (reportam ao CEO)
@@ -22,14 +22,14 @@ ActiveRecord::Base.transaction do
     name: "Daniel",
     email: "daniel@abcorp.com",
     manager: ceo_one,
-    picture: "https://i.pravatar.cc/150?u=abcorp"
+    picture: "https://i.pravatar.cc/150?u=#{rand(10000..99999).to_s}"
   )
 
   director_two = abcorp.employees.create!(
     name: "Patricia",
     email: "patricia@abcorp.com",
     manager: ceo_one,
-    picture: "https://i.pravatar.cc/150?u=abcorp"
+    picture: "https://i.pravatar.cc/150?u=#{rand(10000..99999).to_s}"
   )
   
   # Diretor sem liderados diretos
@@ -37,7 +37,7 @@ ActiveRecord::Base.transaction do
     name: "Leonardo",
     email: "leonardo@abcorp.com",
     manager: ceo_one,
-    picture: "https://i.pravatar.cc/150?u=abcorp"
+    picture: "https://i.pravatar.cc/150?u=#{rand(10000..99999).to_s}"
   )
 
   # Gerentes (reportam aos Diretores)
@@ -45,21 +45,21 @@ ActiveRecord::Base.transaction do
     name: "Fernanda",
     email: "fernanda@abcorp.com",
     manager: director_one,
-    picture: "https://i.pravatar.cc/150?u=abcorp"
+    picture: "https://i.pravatar.cc/150?u=#{rand(10000..99999).to_s}"
   )
 
   manager_two = abcorp.employees.create!(
     name: "Bruno",
     email: "bruno@abcorp.com",
     manager: director_one,
-    picture: "https://i.pravatar.cc/150?u=abcorp"
+    picture: "https://i.pravatar.cc/150?u=#{rand(10000..99999).to_s}"
   )
 
   manager_three = abcorp.employees.create!(
     name: "Diego",
     email: "diego@abcorp.com",
     manager: director_two,
-    picture: "https://i.pravatar.cc/150?u=abcorp"
+    picture: "https://i.pravatar.cc/150?u=#{rand(10000..99999).to_s}"
   )
 
   # Colaboradores (reportam aos Gerentes)
@@ -67,42 +67,42 @@ ActiveRecord::Base.transaction do
     name: "Rafael",
     email: "rafael@abcorp.com",
     manager: manager_one,
-    picture: "https://i.pravatar.cc/150?u=abcorp"
+    picture: "https://i.pravatar.cc/150?u=#{rand(10000..99999).to_s}"
   )
 
   abcorp.employees.create!(
     name: "Viviane",
     email: "viviane@abcorp.com",
     manager: manager_one,
-    picture: "https://i.pravatar.cc/150?u=abcorp"
+    picture: "https://i.pravatar.cc/150?u=#{rand(10000..99999).to_s}"
   )
 
   abcorp.employees.create!(
     name: "Ricardo",
     email: "ricardo@abcorp.com",
     manager: manager_two,
-    picture: "https://i.pravatar.cc/150?u=abcorp"
+    picture: "https://i.pravatar.cc/150?u=#{rand(10000..99999).to_s}"
   )
 
   abcorp.employees.create!(
     name: "Paula",
     email: "paula@abcorp.com",
     manager: manager_two,
-    picture: "https://i.pravatar.cc/150?u=abcorp"
+    picture: "https://i.pravatar.cc/150?u=#{rand(10000..99999).to_s}"
   )
 
   abcorp.employees.create!(
     name: "Nelson",
     email: "nelson@abcorp.com",
     manager: manager_two,
-    picture: "https://i.pravatar.cc/150?u=abcorp"
+    picture: "https://i.pravatar.cc/150?u=#{rand(10000..99999).to_s}"
   )
 
   abcorp.employees.create!(
     name: "Felipe",
     email: "felipe@abcorp.com",
     manager: manager_three,
-    picture: "https://i.pravatar.cc/150?u=abcorp"
+    picture: "https://i.pravatar.cc/150?u=#{rand(10000..99999).to_s}"
   )
 
   puts "Creating employees for GHInc..."
