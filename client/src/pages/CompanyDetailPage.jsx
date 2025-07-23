@@ -22,8 +22,9 @@ function CompanyDetailPage() {
 
   return (
     <div>
-      <h2>{data.name}</h2>
-      <hr />
+      <h2 className="text-3xl font-bold text-center">
+        {data.name}
+      </h2>
       <EmployeeCreateForm companyId={id} />
       <OrgChart employees={data.employees} companyId={id} />
     </div>

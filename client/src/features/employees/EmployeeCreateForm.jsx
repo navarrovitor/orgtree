@@ -1,3 +1,4 @@
+// src/features/employees/EmployeeCreateForm.jsx
 import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createEmployee } from '../../api/apiService';
@@ -24,43 +25,48 @@ function EmployeeCreateForm({ companyId }) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    setApiError(null); 
+    setApiError(null);
     const employeeData = { employee: { name, email, picture: `https://i.pravatar.cc/150?u=${email}` } };
     mutate({ companyId, employeeData });
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ marginBottom: '2rem' }}>
-      <h4>Add New Employee</h4>
-      <input
-        value={name}
-        onChange={(e) => {
-            setName(e.target.value);
-            setApiError(null);
-        }}
-        placeholder="Employee name"
-        required
-      />
-      <input
-        type="email"
-        value={email}
-        onChange={(e) => {
-            setEmail(e.target.value);
-            setApiError(null);
-        }}
-        placeholder="Employee email"
-        required
-      />
-      <button type="submit" disabled={isPending}>
-        {isPending ? 'Adding...' : 'Add Employee'}
-      </button>
-
-      {apiError && apiError.email && (
-        <p style={{ color: 'red' }}>
-          Email Error: {apiError.email.join(', ')}
-        </p>
-      )}
-    </form>
+    <div className="mb-8 p-6 bg-gray-200 dark:bg-gray-700 rounded-lg">
+      <form onSubmit={handleSubmit}>
+        <h4 className="text-xl font-semibold mb-4">
+          Add a new employee to this company
+        </h4>
+        <div className="flex flex-col md:flex-row items-center gap-4">
+          <input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Employee name"
+            required
+            className="w-full md:w-auto flex-grow bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md px-3 py-2 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Employee email"
+            required
+            className="w-full md:w-auto flex-grow bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md px-3 py-2 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <button
+            type="submit"
+            disabled={isPending}
+            className="bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 font-bold py-2 px-4 rounded-md transition-colors disabled:bg-slate-500 disabled:cursor-not-allowed"
+          >
+            {isPending ? 'Adding...' : 'Add Employee'}
+          </button>
+        </div>
+        {apiError && apiError.email && (
+          <p className="text-red-500 mt-2">
+            Email Error: {apiError.email.join(', ')}
+          </p>
+        )}
+      </form>
+    </div>
   );
 }
 
