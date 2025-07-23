@@ -19,12 +19,12 @@ describe EmployeeSerializer, type: :serializer do
 
   it 'includes the manager with the simplified format' do
     expect(json['manager']['id']).to eq(manager.id)
-    expect(json['manager'].keys).to contain_exactly('id', 'name', 'email')
+    expect(json['manager'].keys).to contain_exactly('id', 'name', 'email', 'picture')
   end
 
   it 'includes subordinates with the simplified format' do
     expect(json['subordinates'].size).to eq(1)
     expect(json['subordinates'].first['id']).to eq(subordinate.id)
-    expect(json['subordinates'].first.keys).to contain_exactly('id', 'name', 'email')
+    expect(json['subordinates'].first.keys).to contain_exactly('id', 'name', 'email', 'picture')
   end
 end
