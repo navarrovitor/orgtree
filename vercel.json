@@ -2,7 +2,7 @@
   "version": 2,
   "builds": [
     {
-      "src": "api/config/application.rb",
+      "src": "api/config.ru",
       "use": "@vercel/ruby",
       "config": {
         "maxLambdaSize": "50mb"
@@ -12,18 +12,18 @@
       "src": "client/package.json",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "client/dist"
+        "distDir": "dist"
       }
     }
   ],
-  "rewrites": [
+ "routes": [
     {
-      "source": "/api/(.*)",
-      "destination": "/api/config/application.rb"
+      "src": "/api/(.*)",
+      "dest": "api/config.ru"
     },
     {
-      "source": "/(.*)",
-      "destination": "/index.html"
+      "src": "/(.*)",
+      "dest": "/index.html"
     }
   ]
 }
