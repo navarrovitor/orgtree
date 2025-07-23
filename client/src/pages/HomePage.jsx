@@ -5,10 +5,14 @@ function HomePage() {
   return (
     <div>
       <CompanyCreateForm />
-      <hr />
-
-      <h2>Companies</h2>
-      <p>Select a company to view its organization chart.</p>
+      <div>
+        <h2 className="text-3xl font-bold">
+          Companies
+        </h2>
+        <p className="mt-2 text-lg">
+          Select a company to view its hierarchy.
+        </p>
+      </div>
       <CompanyList />
     </div>
   );

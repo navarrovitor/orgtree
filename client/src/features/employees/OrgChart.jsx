@@ -7,8 +7,6 @@ function OrgChart({ employees, companyId }) {
     return <p>This company has no employees yet.</p>;
   }
 
-  console.log("Employees considered Top Level:", topLevelEmployees.map(e => e.name));
-
   return (
     <div>
       <h3>Organization Chart</h3>
