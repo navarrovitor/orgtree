@@ -27,19 +27,19 @@ function CompanyCreateForm() {
         <h3 className="text-xl font-semibold mb-4">
           Create a new company
         </h3>
-        <div className="flex items-center gap-4">
+        <div className="flex flex-col md:flex-row items-stretch md:items-center gap-4">
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="New company name"
             disabled={isPending}
-            className="flex-grow bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md px-3 py-2 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="flex-grow bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md px-3 py-2 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-green-500"
           />
           <button
             type="submit"
             disabled={isPending}
-            className="bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 font-bold py-2 px-4 rounded-md transition-colors disabled:bg-slate-500 disabled:cursor-not-allowed"
+            className="bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md transition-colors disabled:bg-slate-500 disabled:cursor-not-allowed"
           >
             {isPending ? 'Creating...' : 'Create Company'}
           </button>

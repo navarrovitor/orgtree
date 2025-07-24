@@ -36,13 +36,13 @@ function EmployeeCreateForm({ companyId }) {
         <h4 className="text-xl font-semibold mb-4">
           Add a new employee to this company
         </h4>
-        <div className="flex flex-col md:flex-row items-center gap-4">
+        <div className="flex flex-col lg:flex-row items-center gap-4">
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Employee name"
             required
-            className="w-full md:w-auto flex-grow bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md px-3 py-2 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full lg:w-auto flex-grow bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md px-3 py-2 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <input
             type="email"
@@ -50,12 +50,12 @@ function EmployeeCreateForm({ companyId }) {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Employee email"
             required
-            className="w-full md:w-auto flex-grow bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md px-3 py-2 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full lg:w-auto flex-grow bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md px-3 py-2 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <button
             type="submit"
             disabled={isPending}
-            className="bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 font-bold py-2 px-4 rounded-md transition-colors disabled:bg-slate-500 disabled:cursor-not-allowed"
+            className="w-full lg:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition-colors disabled:bg-slate-500 disabled:cursor-not-allowed"
           >
             {isPending ? 'Adding...' : 'Add Employee'}
           </button>
