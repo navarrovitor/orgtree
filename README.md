@@ -1,76 +1,78 @@
 # OrgTree
 
-Uma aplicação full-stack para gerenciamento de organogramas, construída com Ruby on Rails 7 e React, como parte de um desafio de desenvolvimento.
+Uma aplicação full-stack para gerenciamento de organogramas, construída com Ruby on Rails 7 e React.
 
 ## Tabela de Conteúdos
-
-1.  [Sobre o Projeto](https://github.com/navarrovitor/orgtree#sobre-o-projeto)
-2.  [Funcionalidades](https://github.com/navarrovitor/orgtree#funcionalidades)
-3.  [Documentação da API (Swagger)](https://github.com/navarrovitor/orgtree#documenta%C3%A7%C3%A3o-da-api-swagger)
-4.  [Stack de Tecnologias](https://github.com/navarrovitor/orgtree#stack-de-tecnologias)
-5.  [Como Executar o Projeto](https://github.com/navarrovitor/orgtree#como-executar-o-projeto)
-6.  [Como Rodar os Testes](https://github.com/navarrovitor/orgtree#como-rodar-os-testes)
-7.  [Modelos & Relacionamentos](https://github.com/navarrovitor/orgtree#modelos--relacionamentos)
+1. [Sobre o Projeto](#sobre-o-projeto)
+2. [Modelos & Relacionamentos](#modelos--relacionamentos)
+3. [Funcionalidades](#funcionalidades)
+4. [Decisões de Arquitetura](#decisões-de-arquitetura)
+5. [Documentação da API (Swagger)](#documentação-da-api-swagger)
+6. [Stack de Tecnologias](#stack-de-tecnologias)
+7. [Como Executar o Projeto](#como-executar-o-projeto)
+8. [Como Rodar os Testes](#como-rodar-os-testes)
 
 ## Sobre o Projeto
+O OrgTree é uma aplicação monolítica composta por um backend **API RESTful em Rails** e um frontend em **React**. O objetivo é fornecer uma ferramenta robusta e escalável para empresas gerenciarem sua estrutura organizacional, funcionários e hierarquias. O frontend é servido pela Vercel e a API pelo Render.
 
-O OrgTree é uma aplicação monolítica composta por um backend **API RESTful em Rails** e um frontend em **React**. O objetivo é fornecer uma ferramenta robusta e escalável para empresas gerenciarem sua estrutura organizacional, funcionários e hierarquias.
+## Modelos e Relacionamentos
+<img width="872" height="445" alt="image" src="https://github.com/user-attachments/assets/332e2e86-4bff-44d7-8c23-ed7484c581f5" />
+
+- **Company**: Para representar uma empresa
+    - **Atributos**:
+        - `name` (string)
+    - **`has_many`** `:employees`
+- **Employee**: Para representar um colaborador
+    - **Atributos**:
+        - `name` (string)
+        - `email` (string)
+        - `picture` (string)
+    - **`belongs_to`** `:company`
+    - **`belongs_to`** `:manager`
+    - **`has_many`** `:subordinates`
 
 ## Funcionalidades
+- **Gerenciamento de Empresas:** Cadastro e listagem de múltiplas empresas.
+- **Visualização de Organograma:**
+  -   Visualização da hierarquia de funcionários em formato de árvore.
+  -   Capacidade de expandir e colapsar ramos da árvore.
+- **Gerenciamento de Colaboradores:**
+  -   Cadastro e remoção de colaboradores em uma empresa.
+  -   Atribuição de um gestor a um colaborador de forma interativa.
+- **Funcionalidades Extras:**
+  -   **Paginação** em todos os endpoints de listagem para garantir performance.
+  -   **Documentação Interativa da API** com Swagger (Rswag).
+  -   **Modo Claro / Escuro (Dark Mode)** com persistência da preferência do usuário.
+  -   **Layout Responsivo** com Header e Footer fixos.
 
-  - **Gerenciamento de Empresas:** Cadastro, listagem e visualização de múltiplas empresas no sistema.
-  - **Gerenciamento de Colaboradores:** Cadastro, listagem e remoção de colaboradores, sempre associados a uma empresa.
-  - **Estrutura Organizacional:**
-      - Atribuição de um gestor a um colaborador.
-      - Listagem de pares (colegas com o mesmo gestor).
-      - Listagem de liderados diretos.
-      - Listagem de liderados de segundo nível (liderados dos liderados).
-  - **Regras de Negócio:** Validações robustas para garantir a integridade da hierarquia, como:
-      - Impedir a criação de loops (ex: um gestor não pode ser liderado por um de seus subordinados).
-      - Garantir que gestores e liderados pertençam à mesma empresa.
-  - **Paginação (Pagy):** Todos os endpoints de listagem são paginados para garantir performance e escalabilidade, mesmo com um grande volume de dados.
-  - **Documentação Interativa (Swagger):** A API é 100% documentada usando Swagger (OpenAPI). Isso permite que qualquer desenvolvedor entenda e teste os endpoints facilmente através de uma interface web.
-  - **Tratamento de Erros Centralizado:** Respostas de erro consistentes e padronizadas em toda a API, facilitando a depuração e o tratamento de exceções no frontend.
+## Decisões de Arquitetura
+- **Separação Backend/Frontend:** A API Rails é totalmente desacoplada do cliente React, comunicando-se via REST. Isso permite que cada parte seja desenvolvida, testada e implantada de forma independente.
+- **Gerenciamento de Estado no Frontend:** Foi utilizada a biblioteca **React Query (TanStack Query)** para gerenciar o "estado do servidor". Essa abordagem simplifica drasticamente a lógica de fetching, caching e atualização de dados, eliminando a necessidade de ferramentas mais complexas como Redux para este caso de uso. O estado de UI (como o tema claro/escuro) é gerenciado pelo Context API do React.
+- **Plataformas de Deploy:** **Vercel** foi escolhida para o frontend por sua otimização para aplicações estáticas e JAMstack. **Render** foi escolhido para o backend por sua simplicidade, compatibilidade com Rails e por oferecer um banco de dados PostgreSQL gratuito.
 
 ## Documentação da API (Swagger)
+A documentação completa e interativa da API está disponível no endpoint da API no Render.
+**[Documentação da API](https://orgtree-api.onrender.com/docs)**
 
-A documentação completa e interativa da API está disponível via Swagger UI.
-
-Após iniciar o servidor backend, acesse:
+Ou localmente via localhost.
 **[http://localhost:3000/docs](http://localhost:3000/docs)**
 
 ## Stack de Tecnologias
-
-### Backend (API)
-
-  - Ruby 3+
-  - Ruby on Rails 7 (API-only)
-  - **SQLite3** para o banco de dados
-  - **Pagy** para paginação
-  - **Rswag** para documentação Swagger
-  - **RSpec** e **FactoryBot** para testes
-
-### Frontend
-
-  - React
-  - Vite
-  - Axios (para chamadas à API)
-  - React Router (para roteamento)
+- **Backend:** Ruby on Rails 7, PostgreSQL, RSpec, FactoryBot, Pagy, Rswag.
+- **Frontend:** React, Vite, Tailwind CSS, Axios, React Router, TanStack Query.
+- **Plataformas:** Vercel (Frontend), Render (Backend).
 
 ## Como Executar o Projeto
-
-Para executar o projeto, você precisará clonar o repositório e configurar tanto o backend quanto o frontend.
+Siga os passos abaixo para configurar e rodar o projeto localmente.
 
 ### Pré-requisitos
-
-  - Ruby
-  - Bundler
-  - Node.js e npm/yarn
+- Ruby e Bundler
+- Node.js e NPM/Yarn
+- PostgreSQL
 
 ### Backend (API)
-
 ```bash
-# Navegue até a pasta da API (ex: /api)
+# Navegue até a pasta da API
 cd api
 
 # Instale as dependências
@@ -83,55 +85,34 @@ rails db:migrate
 # Popule o banco com dados de exemplo
 rails db:seed
 
-# Inicie o servidor Rails na porta 3000
+# Inicie o servidor Rails
 rails s
 ```
 
 ### Frontend
-
 ```bash
-# Em outro terminal, navegue até a pasta do cliente (ex: /client)
+# Em outro terminal, navegue até a pasta do cliente
 cd client
 
 # Instale as dependências
 npm install
 
-# Inicie o servidor de desenvolvimento do React
+# Inicie o servidor de desenvolvimento
 npm run dev
 ```
 
 ## Como Rodar os Testes
-
 ### Testes do Backend
-
 ```bash
 # A partir da pasta da API
 rspec
 ```
 
 ### Testes da Documentação (Swagger)
-
 ```bash
 # A partir da pasta da API
 rake rswag:specs:swaggerize
 ```
 
-## Modelos & Relacionamentos
-<img width="872" height="445" alt="image" src="https://github.com/user-attachments/assets/332e2e86-4bff-44d7-8c23-ed7484c581f5" />
-
-  - **Company**: Para representar uma empresa
-      - **Atributos**:
-          - `name` (string)
-      - **`has_many`** `:employees`
-  - **Employee**: Para representar um colaborador
-      - **Atributos**:
-          - `name` (string)
-          - `email` (string)
-          - `picture` (string)
-      - **`belongs_to`** `:company`
-      - **`belongs_to`** `:manager`
-      - **`has_many`** `:subordinates`
-
------
-
-Desenvolvido com ❤️ por navarrovitor
+---
+Desenvolvido com ❤️ por [navarrovitor](https://github.com/navarrovitor)
